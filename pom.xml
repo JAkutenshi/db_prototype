@@ -10,12 +10,12 @@
 
   <name>db_prototype</name>
   <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <!--url>http://www.example.com</url-->
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
   <dependencies>
@@ -24,6 +24,17 @@
       <artifactId>junit</artifactId>
       <version>4.11</version>
       <scope>test</scope>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
+    <dependency>
+      <groupId>org.xerial</groupId>
+      <artifactId>sqlite-jdbc</artifactId>
+      <version>3.28.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.miglayout</groupId>
+      <artifactId>miglayout-swing</artifactId>
+      <version>4.2</version>
     </dependency>
   </dependencies>
 
@@ -39,6 +50,21 @@
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
           <version>3.0.2</version>
+          <configuration>
+            <encoding>utf-8</encoding>
+            <outputDirectory>${basedir}/target/classes</outputDirectory>
+            <includeEmptyDirs>true</includeEmptyDirs>
+            <resources>
+              <resource>
+                <directory>${basedir}/src/main/resources/fonts</directory>
+                <filtering>false</filtering>
+              </resource>
+              <!--resource>
+                <directory>${basedir}/src/main/resources/locales</directory>
+                <filtering>false</filtering>
+              </resource-->
+            </resources>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
@@ -51,7 +77,40 @@
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
           <version>3.0.2</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <addClasspath>true</addClasspath>
+                <classpathPrefix>lib/</classpathPrefix>
+                <mainClass>net.jakutenshi.App</mainClass>
+              </manifest>
+            </archive>
+          </configuration>
         </plugin>
+        <plugin>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <configuration>
+            <appendAssemblyId>false</appendAssemblyId>
+            <archive>
+              <manifest>
+                <mainClass>net.jakutenshi.App</mainClass>
+              </manifest>
+            </archive>
+            <descriptorRefs>
+              <descriptorRef>jar-with-dependencies</descriptorRef>
+            </descriptorRefs>
+          </configuration>
+          <executions>
+            <execution>
+              <id>make-assembly</id> <!-- this is used for inheritance merges -->
+              <phase>package</phase> <!-- bind to the packaging phase -->
+              <goals>
+                <goal>single</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
           <version>2.5.2</version>
@@ -72,4 +131,5 @@
       </plugins>
     </pluginManagement>
   </build>
+
 </project>
