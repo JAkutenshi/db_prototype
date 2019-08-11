@@ -58,4 +58,6 @@ public class AbstractTable<T extends SQLEntity> extends AbstractTableModel {
     public String getColumnName(int column) {
         return columnNames[column];
     }
+
+
 }

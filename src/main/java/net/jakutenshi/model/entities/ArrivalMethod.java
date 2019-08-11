@@ -1,31 +1,53 @@
 package net.jakutenshi.model.entities;
 
+import jdk.vm.ci.meta.Constant;
+import net.jakutenshi.model.sql.SQLEntity;
+import net.jakutenshi.model.tables.Model;
+import net.jakutenshi.utils.Constants;
+
 import java.util.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
 
-import static net.jakutenshi.utils.Constants.DATE_NONE;
-import static net.jakutenshi.utils.Constants.NONE;
+import static net.jakutenshi.utils.Constants.*;
 
-public class ArrivalMethod {
-    private int    id;
+public class ArrivalMethod extends SQLEntity {
     private int    driverID;
     private int    autoTypeID;
-    private int    autoNumber;
-    private Date   arrivingTime;
+    private String    autoNumber;
+    private Date arrivingTime;
     private int    frequency;
     private String arrivesFrom;
 
     public ArrivalMethod() {
-        this.id           = -1;
+        super(-1);
         this.driverID     = -1;
         this.autoTypeID   = -1;
-        this.autoNumber   = -1;
+        this.autoNumber   = NONE;
         this.arrivingTime = DATE_NONE;
         this.frequency    = -1;
         this.arrivesFrom  = NONE;
     }
 
-    public ArrivalMethod(int id, int driverID, int autoTypeID, int autoNumber, Date arrivingTime, int frequency, String arrivesFrom) {
-        this.id           = id;
+    public ArrivalMethod(ResultSet rs) throws SQLException {
+        super(rs);
+        this.driverID     = rs.getInt("driver_id");
+        this.autoTypeID   = rs.getInt("auto_type_id");
+        this.autoNumber   = rs.getString("auto_number");
+        try {
+            this.arrivingTime = Constants.TIME_FORMAT.parse(rs.getString("arriving_time"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        this.frequency    = rs.getInt("frequency");
+        this.arrivesFrom  = rs.getString("arrives_from");
+    }
+
+    public ArrivalMethod(int id, int driverID, int autoTypeID,
+                         String autoNumber, Date arrivingTime, int frequency, String arrivesFrom) {
+        super(id);
         this.driverID     = driverID;
         this.autoTypeID   = autoTypeID;
         this.autoNumber   = autoNumber;
@@ -34,12 +56,38 @@ public class ArrivalMethod {
         this.arrivesFrom  = arrivesFrom;
     }
 
-    public int getID() {
-        return id;
+    @Override
+    public Object getAttribute(int column) {
+        switch (column) {
+            case 0: return Model.EMPLOYEES.getEntity(driverID).getName();
+            case 1: return Model.AUTO_TYPES.getEntity(autoTypeID).getName();
+            case 2: return getAutoNumber();
+            case 3: return TIME_FORMAT.format(getArrivingTime());
+            case 4: return getFrequency();
+            case 5: return getArrivesFrom();
+            default: return null;
+        }
     }
 
-    public void setID(int id) {
-        this.id = id;
+    @Override
+    public PreparedStatement prepare(PreparedStatement st) throws SQLException {
+        st.setInt(1,    getID());
+        st.setInt(2,    getDriverID());
+        st.setInt(3,    getAutoTypeID());
+        st.setString(4, getAutoNumber());
+        st.setString(5, TIME_FORMAT.format(getArrivingTime()));
+        st.setInt(6,    getFrequency());
+        st.setString(7, getArrivesFrom());
+        return st;
+    }
+
+    @Override
+    public String toString() {
+        return autoNumber + " в " + TIME_FORMAT.format(arrivingTime) + " по адресу " + arrivesFrom; //ToDo time format
+    }
+
+    public String getDescription() {
+        return toString();
     }
 
     public int getDriverID() {
@@ -58,11 +106,11 @@ public class ArrivalMethod {
         this.autoTypeID = autoTypeID;
     }
 
-    public int getAutoNumber() {
+    public String getAutoNumber() {
         return autoNumber;
     }
 
-    public void setAutoNumber(int autoNumber) {
+    public void setAutoNumber(String autoNumber) {
         this.autoNumber = autoNumber;
     }
 

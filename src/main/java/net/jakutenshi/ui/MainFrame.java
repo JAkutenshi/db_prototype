@@ -1,6 +1,7 @@
 package net.jakutenshi.ui;
 
 import net.jakutenshi.ui.views.OrganizationsView;
+import net.jakutenshi.utils.Constants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +14,7 @@ public class MainFrame extends JFrame {
     public MainFrame(String title, ResourceBundle locale, JComponent organizationsView) throws HeadlessException {
         super(title);
         this.locale = locale;
-        this.setFont(new Font("Terminus (TTF)", Font.BOLD, 18));
+        this.setFont(Constants.FONT_TERMINUS);
 
         tabs = new JTabbedPane();
         tabs.setFont(this.getFont());

@@ -14,8 +14,8 @@ VALUES
        ('ООО "BMW"', 'г.Мюнхен, ул. Берлинская, д.13', '+74956666666');
 
 -- Список объектов организаций
-DROP TABLE IF EXISTS Object;
-CREATE TABLE Object (
+DROP TABLE IF EXISTS OrgObject;
+CREATE TABLE OrgObject (
     id               INTEGER PRIMARY KEY AUTOINCREMENT,
     organization_id  INTEGER       NOT NULL,
     name             TEXT(100)     NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE Object (
     FOREIGN KEY (security_head_id) REFERENCES Employee (id),
     FOREIGN KEY (salary_type_id)   REFERENCES SalaryType(id)
 );
-INSERT INTO Object (organization_id, name, address, phone_num, security_head_id, salary_ratio, salary_type_id)
+INSERT INTO OrgObject (organization_id, name, address, phone_num, security_head_id, salary_ratio, salary_type_id)
 VALUES
 (1, 'Бар', 'г.Вологда, ул. Воркутинская, д.17', '+79216666667', 1, 1.0, 1);
 
@@ -49,7 +49,7 @@ CREATE TABLE Post (
     checkage             NUMERIC(10,2),
     arrival_method_id    INTEGER,
 
-    FOREIGN KEY (object_id)         REFERENCES Object (id),
+    FOREIGN KEY (object_id)         REFERENCES OrgObject (id),
     FOREIGN KEY (arrival_method_id) REFERENCES ArrivalMethod(id)
 );
 INSERT INTO Post (object_id, name, address, phone_num, number,
@@ -61,25 +61,25 @@ VALUES
 -- Список всех сотрудников
 DROP TABLE IF EXISTS Employee;
 CREATE TABLE Employee (
-    id                       INTEGER PRIMARY KEY AUTOINCREMENT,
-    second_name              TEXT(20),
-    first_name               TEXT(20),
-    middle_name              TEXT(20),
-    phone_number             TEXT(12) UNIQUE,
-    PSD_expiration_date      TEXT(8), -- Private Security Document
-    training_expiration_date TEXT(8),
-    is_reserved              INTEGER, -- BOOL
-    mainPost_id              INTEGER,
-    category_id              INTEGER,
-    position_id              INTEGER,
-    note                     TEXT(400),
+                          id                       INTEGER PRIMARY KEY AUTOINCREMENT,
+                          second_name              TEXT(20),
+                          first_name               TEXT(20),
+                          middle_name              TEXT(20),
+                          phone_number             TEXT(12) UNIQUE,
+                          PSD_expiration_date      TEXT(8), -- Private Security Document
+                          training_expiration_date TEXT(8),
+                          is_reserved              INTEGER, -- BOOL
+                          main_post_id             INTEGER,
+                          position_id              INTEGER,
+                          category_id              INTEGER,
+                          note                     TEXT(400),
 
-    FOREIGN KEY (mainPost_id) REFERENCES Post(id),
-    FOREIGN KEY (category_id) REFERENCES Category(id),
-    FOREIGN KEY (position_id) REFERENCES Position(id)
+                          FOREIGN KEY (main_post_id) REFERENCES Post(id),
+                          FOREIGN KEY (category_id) REFERENCES Category(id),
+                          FOREIGN KEY (position_id) REFERENCES Position(id)
 );
 INSERT INTO Employee (second_name, first_name, middle_name, phone_number, PSD_expiration_date,
-                      training_expiration_date, is_reserved, mainPost_id, category_id, position_id, note)
+                      training_expiration_date, is_reserved, main_post_id, category_id, position_id, note)
 VALUES ('Евсюков', 'Иван', 'Иванович', '+79992019890', '2019-12-01', '2019-12-01', 0, 1, 1, 1, 'Обычный человек'),
        ('Евсюков', 'Василий', 'Иванович', '+79992019891', '2019-11-01', '2019-11-01', 0, 1, 1, 3, 'Обычный человек'),
        ('Евсюкова', 'Мария', 'Иванова', '+79992019892', '2019-10-01', '2019-10-01', 0, 1, 1, 1, 'Обычный человек');
@@ -94,40 +94,42 @@ INSERT INTO Category (name) VALUES ('Оформленный'), ('Неоформ�
 -- Должности сотрудников
 DROP TABLE IF EXISTS Position;
 CREATE TABLE Position (
-                          id   INTEGER PRIMARY KEY AUTOINCREMENT,
-                          name TEXT(20) );
+    id   INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT(20) );
 INSERT INTO Position (name) VALUES ('Охранник'), ('Начальник охраны?'), ('Водитель-охранник');
 
 -- Тип зарплаты
 DROP TABLE IF EXISTS SalaryType;
 CREATE TABLE SalaryType (
     id       INTEGER PRIMARY KEY AUTOINCREMENT,
-    typename TEXT(20) );
-INSERT INTO SalaryType (typename) VALUES ('Почасовая'), ('Дежурство');
+    type_name TEXT(20) );
+INSERT INTO SalaryType (type_name) VALUES ('Почасовая'), ('Дежурство');
 
 -- Дежурства
 DROP TABLE IF EXISTS Duty;
 CREATE TABLE Duty (
-    id             INTEGER PRIMARY KEY AUTOINCREMENT,
-    security_id    INTEGER,
-    post_id        INTEGER,
-    date           TEXT(8),
-    category_id    INTEGER,
-    total_hours    INTEGER,
-    is_holiday     INTEGER, -- BOOL
-    night_hours    INTEGER,
-    position_id    INTEGER,
-    salary_type_id INTEGER,
-    salary         REAL,
+                      id             INTEGER PRIMARY KEY AUTOINCREMENT,
+                      security_id    INTEGER,
+                      post_id        INTEGER,
+                      position_id    INTEGER,
+                      category_id    INTEGER,
+                      date           TEXT(8),
+                      total_hours    INTEGER,
+                      night_hours    INTEGER,
+                      is_holiday     INTEGER, -- BOOL
+                      salary_type_id INTEGER,
+                      salary         REAL,
 
-    FOREIGN KEY (security_id)    REFERENCES Employee (id),
-    FOREIGN KEY (post_id)        REFERENCES Post(id),
-    FOREIGN KEY (position_id)    REFERENCES Position(id),
-    FOREIGN KEY (salary_type_id) REFERENCES SalaryType(id) );
+                      FOREIGN KEY (security_id)    REFERENCES Employee (id),
+                      FOREIGN KEY (post_id)        REFERENCES Post(id),
+                      FOREIGN KEY (position_id)    REFERENCES Position(id),
+                      FOREIGN KEY (salary_type_id) REFERENCES SalaryType(id) );
 INSERT INTO Duty (security_id, post_id, date, category_id, total_hours, is_holiday,
                   night_hours, position_id, salary_type_id, salary)
 VALUES
-(2, 1, '20190101', 1, 24, 0, 8, 1, 1, 3000.0);
+(2, 1, '2019-01-01', 1, 24, 0, 8, 1, 1, 3000.0);
+
+-- SELECT * FROM Employee INNER JOIN Duty D on Employee.id = D.security_id;
 
 -- Неявки
 DROP TABLE IF EXISTS Absence;
@@ -169,7 +171,7 @@ CREATE TABLE ArrivalMethod (
     FOREIGN KEY (auto_type_id) REFERENCES AutoType(id)
 );
 INSERT INTO ArrivalMethod (driver_id, auto_type_id, auto_number, arriving_time, frequency, arrives_from)
-VALUES (2, 2, 'а777бв35', '07:00:00', 1, 'г.Серпухов, ул. Мира, д.1');
+VALUES (2, 2, 'а777бв35', '07:00', 1, 'г.Серпухов, ул. Мира, д.1');
 
 DROP TABLE IF EXISTS AutoType;
 CREATE TABLE AutoType (

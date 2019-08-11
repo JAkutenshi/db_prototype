@@ -1,18 +1,24 @@
 package net.jakutenshi.model.entities;
 
+import net.jakutenshi.model.sql.SQLEntity;
+import net.jakutenshi.model.tables.Model;
+
 import java.util.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
 
 import static net.jakutenshi.utils.Constants.*;
 
-public class Employee {
-    private int     id;
-    private String  second_name;
-    private String  first_name;
-    private String  middle_name;
-    private String  phone_number;
-    private Date    PSD_expiration_date;
-    private Date    training_expiration_date;
-    private boolean is_reserved;
+public class Employee extends SQLEntity {
+    private String  secondName;
+    private String  firstName;
+    private String  middleName;
+    private String  phoneNumber;
+    private Date    PSDExpirationDate;
+    private Date    trainingExpirationDate;
+    private boolean isReserved;
     private int     mainPostID;
     private int     categoryID;
     private int     positionID;
@@ -20,99 +26,149 @@ public class Employee {
 
 
     public Employee() {
-        this.id                       = -1;
-        this.second_name              = NONE;
-        this.first_name               = NONE;
-        this.middle_name              = NONE;
-        this.phone_number             = PHONE_NONE;
-        this.PSD_expiration_date      = DATE_NONE;
-        this.training_expiration_date = DATE_NONE;
-        this.is_reserved              = false;
+        super(-1);
+        this.secondName               = NONE;
+        this.firstName                = NONE;
+        this.middleName               = NONE;
+        this.phoneNumber              = PHONE_NONE;
+        this.PSDExpirationDate        = DATE_NONE;
+        this.trainingExpirationDate   = DATE_NONE;
+        this.isReserved               = false;
         this.mainPostID               = -1;
         this.categoryID               = -1;
         this.positionID               = -1;
         this.note                     = NONE;
     }
 
-    public Employee(int id, String second_name, String first_name, String middle_name,
-                    String phone_number, Date PSD_expiration_date, Date training_expiration_date,
-                    boolean is_reserved, int mainPostID, int categoryID, int positionID, String note) {
-        this.id                       = id;
-        this.second_name              = second_name;
-        this.first_name               = first_name;
-        this.middle_name              = middle_name;
-        this.phone_number             = phone_number;
-        this.PSD_expiration_date      = PSD_expiration_date;
-        this.training_expiration_date = training_expiration_date;
-        this.is_reserved              = is_reserved;
+    public Employee(int id, String secondName, String firstName, String middleName,
+                    String phoneNumber, Date PSDExpirationDate, Date trainingExpirationDate,
+                    boolean isReserved, int mainPostID, int categoryID, int positionID, String note) {
+        super(id);
+        this.secondName               = secondName;
+        this.firstName                = firstName;
+        this.middleName               = middleName;
+        this.phoneNumber              = phoneNumber;
+        this.PSDExpirationDate        = PSDExpirationDate;
+        this.trainingExpirationDate   = trainingExpirationDate;
+        this.isReserved               = isReserved;
         this.mainPostID               = mainPostID;
         this.categoryID               = categoryID;
         this.positionID               = positionID;
         this.note                     = note;
     }
 
-    public int getID() {
-        return id;
+    public Employee(ResultSet rs) throws SQLException {
+        super(rs);
+        this.secondName               = rs.getString("second_name");
+        this.firstName                = rs.getString("first_name");
+        this.middleName               = rs.getString("middle_name");
+        this.phoneNumber              = rs.getString("phone_number");
+        try {
+            this.PSDExpirationDate        = SQLITE_DATE_FORMAT.parse(rs.getString("PSD_expiration_date"));
+            this.trainingExpirationDate   = SQLITE_DATE_FORMAT.parse(rs.getString("training_expiration_date"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        this.isReserved               = rs.getBoolean("is_reserved");
+        this.mainPostID               = rs.getInt("main_post_id");
+        this.categoryID               = rs.getInt("category_id");
+        this.positionID               = rs.getInt("position_id");
+        this.note                     = rs.getString("note");
     }
 
-    public void setID(int id) {
-        this.id = id;
+    @Override
+    public Object getAttribute(int column) {
+        switch (column) {
+            case 0: return getSecondName();
+            case 1: return getFirstName();
+            case 2: return getMiddleName();
+            case 3: return getPhoneNumber();
+            case 4: return DATE_FORMAT.format(getPSDExpirationDate());
+            case 5: return DATE_FORMAT.format(getTrainingExpirationDate());
+            case 6: return isReserved();
+            case 7: return Model.POSTS.getEntity(mainPostID).getDescription();
+            case 8: return Model.CATEGORIES.getEntity(categoryID).getName();
+            case 9: return Model.POSITIONS.getEntity(positionID).getName();
+            case 10: return getNote();
+            default: return null;
+        }
     }
 
-    public String getSecond_name() {
-        return second_name;
+    @Override
+    public PreparedStatement prepare(PreparedStatement st) throws SQLException {
+        st.setString(1, getSecondName());
+        st.setString(2, getFirstName());
+        st.setString(3, getMiddleName());
+        st.setString(4, getPhoneNumber());
+        st.setString(5, SQLITE_DATE_FORMAT.format(getPSDExpirationDate()));
+        st.setString(6, SQLITE_DATE_FORMAT.format(getTrainingExpirationDate()));
+        st.setBoolean(7, isReserved());
+        st.setInt(8, getMainPostID());
+        st.setInt(9, getCategoryID());
+        st.setInt(10, getPositionID());
+        st.setString(11, getNote());
+        return st;
     }
 
-    public void setSecond_name(String second_name) {
-        this.second_name = second_name;
+    public String getName() {
+        return secondName + " " + firstName + " " + middleName;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getSecondName() {
+        return secondName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setSecondName(String secondName) {
+        this.secondName = secondName;
     }
 
-    public String getMiddle_name() {
-        return middle_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setMiddle_name(String middle_name) {
-        this.middle_name = middle_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getPhone_number() {
-        return phone_number;
+    public String getMiddleName() {
+        return middleName;
     }
 
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
     }
 
-    public Date getPSD_expiration_date() {
-        return PSD_expiration_date;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPSD_expiration_date(Date PSD_expiration_date) {
-        this.PSD_expiration_date = PSD_expiration_date;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public Date getTraining_expiration_date() {
-        return training_expiration_date;
+    public Date getPSDExpirationDate() {
+        return PSDExpirationDate;
     }
 
-    public void setTraining_expiration_date(Date training_expiration_date) {
-        this.training_expiration_date = training_expiration_date;
+    public void setPSDExpirationDate(Date PSDExpirationDate) {
+        this.PSDExpirationDate = PSDExpirationDate;
     }
 
-    public boolean isIs_reserved() {
-        return is_reserved;
+    public Date getTrainingExpirationDate() {
+        return trainingExpirationDate;
     }
 
-    public void setIs_reserved(boolean is_reserved) {
-        this.is_reserved = is_reserved;
+    public void setTrainingExpirationDate(Date trainingExpirationDate) {
+        this.trainingExpirationDate = trainingExpirationDate;
+    }
+
+    public boolean isReserved() {
+        return isReserved;
+    }
+
+    public void setReserved(boolean isReserved) {
+        this.isReserved = isReserved;
     }
 
     public int getMainPostID() {

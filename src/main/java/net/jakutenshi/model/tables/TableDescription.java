@@ -32,8 +32,8 @@ public class TableDescription {
     }
 
     public int getColumnsCount() {
-        // size - 1 because we're don't take ID into account
-        return getSchema().getSchema().keySet().size() - 1;
+        int count = getSchema().getSchema().keySet().size();
+        return  meta.isIDVisible() ? count : count - 1;
     }
 
     public static String buildAttributesNameTuple(SQLSchema schema) {

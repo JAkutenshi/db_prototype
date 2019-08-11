@@ -1,6 +1,7 @@
 package net.jakutenshi.model.entities;
 
 import net.jakutenshi.model.sql.SQLEntity;
+import net.jakutenshi.model.tables.Model;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -32,9 +33,9 @@ public class Absence extends SQLEntity {
     public Object getAttribute(int column) {
         switch (column){
             case 0:
-                return dutyID;
+                return "#" + getDutyID();
             case 1:
-                return reasonID;
+                return Model.ABSENCE_REASONS.getEntity(reasonID).getName();
             default:
                 return null;
         }

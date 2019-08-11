@@ -1,15 +1,16 @@
 package net.jakutenshi.model.sql;
 
-import java.util.HashMap;
+
+import java.util.LinkedHashMap;
 
 public class SQLSchema {
-    private final HashMap<String, SQLiteType> schema;
+    private final LinkedHashMap<String, SQLiteType> schema;
 
-    public SQLSchema(HashMap<String, SQLiteType> schema) {
+    public SQLSchema(LinkedHashMap<String, SQLiteType> schema) {
         this.schema = schema;
     }
 
-    public HashMap<String, SQLiteType> getSchema() {
+    public LinkedHashMap<String, SQLiteType> getSchema() {
         return schema;
     }
 

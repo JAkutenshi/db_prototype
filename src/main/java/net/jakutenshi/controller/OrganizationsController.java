@@ -5,23 +5,21 @@ import net.jakutenshi.model.entities.Absence;
 import net.jakutenshi.model.entities.Organization;
 import net.jakutenshi.model.sql.DBTables;
 import net.jakutenshi.model.tables.AbstractTable;
+import net.jakutenshi.model.tables.Model;
 import net.jakutenshi.model.tables.TableDescription;
 import net.jakutenshi.ui.views.OrganizationsView;
+import net.jakutenshi.utils.Constants;
+import net.jakutenshi.utils.UIUtilFunctions;
 
 import javax.swing.*;
 
 public class OrganizationsController {
     //OrganizationsView view;
     JComponent view;
-    //OrganizationTable organizationTable;
-    AbstractTable<Organization> model;
-    AbstractTable<Absence> model1;
 
     public OrganizationsController() {
-        model = new AbstractTable<Organization>(DBTables.ORGANIZATION);
-        model1 = new AbstractTable<Absence>(DBTables.ABSENCE);
-        //view = new OrganizationsView(organizationTable.toStringArrayList());
-        view = new JScrollPane(new JTable(model1));
+        view = new JScrollPane(new JTable(Model.POSTS));
+        UIUtilFunctions.changeFont(view, Constants.FONT_TERMINUS);
     }
 
     public JComponent getView() {

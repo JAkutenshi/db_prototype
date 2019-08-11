@@ -38,11 +38,11 @@ public class Organization extends SQLEntity {
     public Object getAttribute(int column) {
         switch (column) {
             case 0:
-                return name;
+                return getName();
             case 1:
-                return legalAddress;
+                return getLegalAddress();
             case 2:
-                return phoneNum;
+                return getPhoneNum();
             default:
                 return null;
         }
@@ -58,7 +58,11 @@ public class Organization extends SQLEntity {
 
     @Override
     public String toString() {
-        return name + " | " + phoneNum;
+        return name + " | " + legalAddress + " | " + phoneNum;
+    }
+
+    public String getDescription() {
+        return toString();
     }
 
     public String getName() {
