@@ -71,19 +71,21 @@ public class ArrivalMethod extends SQLEntity {
 
     @Override
     public PreparedStatement prepare(PreparedStatement st) throws SQLException {
-        st.setInt(1,    getID());
-        st.setInt(2,    getDriverID());
-        st.setInt(3,    getAutoTypeID());
-        st.setString(4, getAutoNumber());
-        st.setString(5, TIME_FORMAT.format(getArrivingTime()));
-        st.setInt(6,    getFrequency());
-        st.setString(7, getArrivesFrom());
+        st.setInt(1,    getDriverID());
+        st.setInt(2,    getAutoTypeID());
+        st.setString(3, getAutoNumber());
+        st.setString(4, TIME_FORMAT.format(getArrivingTime()));
+        st.setInt(5,    getFrequency());
+        st.setString(6, getArrivesFrom());
         return st;
     }
 
     @Override
     public String toString() {
-        return autoNumber + " в " + TIME_FORMAT.format(arrivingTime) + " по адресу " + arrivesFrom; //ToDo time format
+        return "Машина <"
+                + autoNumber
+                + "> в " + TIME_FORMAT.format(arrivingTime)
+                + " по адресу " + arrivesFrom;
     }
 
     public String getDescription() {

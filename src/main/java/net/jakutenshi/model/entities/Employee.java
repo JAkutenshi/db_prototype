@@ -111,6 +111,11 @@ public class Employee extends SQLEntity {
         return st;
     }
 
+    @Override
+    public String toString() {
+        return getName() + " Тел.:" + phoneNumber;
+    }
+
     public String getName() {
         return secondName + " " + firstName + " " + middleName;
     }

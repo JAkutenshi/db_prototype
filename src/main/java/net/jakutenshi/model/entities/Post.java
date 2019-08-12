@@ -92,7 +92,7 @@ public class Post extends SQLEntity {
 
     @Override
     public String toString() {
-        return name + " | " + address + " | " + phoneNum;
+        return name + " | Адрес: " + address + " | Тел.: " + phoneNum;
     }
 
     public String getDescription() {

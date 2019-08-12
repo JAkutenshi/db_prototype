@@ -10,52 +10,59 @@ import net.jakutenshi.utils.BuildQueriesUtils;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public interface ObjectAccess {
-    static <T extends SQLEntity> void insert(TableDescription desc, T entity) {
-        try(PreparedStatement st = DBConnection.getConnection().prepareStatement(
-                BuildQueriesUtils.buildSQLInsertQuery(desc))
+    static <T extends SQLEntity> long insert(TableDescription desc, T entity) {
+        try(PreparedStatement st = entity.prepare(DBConnection.getConnection().prepareStatement(
+                BuildQueriesUtils.buildSQLInsertQuery(desc),
+                Statement.RETURN_GENERATED_KEYS))
         ) {
-            entity.prepare(st);
-            st.execute();
+            if (st.executeUpdate() == 0) {
+                return -1;
+            }
+            return st.getGeneratedKeys().getLong(1);
         } catch (SQLException e) {
             e.printStackTrace();
+            return -1;
         }
     }
 
-    static <T extends SQLEntity> void delete(TableDescription desc, T entity) {
+    static <T extends SQLEntity> boolean delete(TableDescription desc, T entity) {
         try(PreparedStatement st = DBConnection.getConnection().prepareStatement(
                 BuildQueriesUtils.buildSQLDeleteQuery(desc, entity.getID()))
         ) {
-            st.execute();
+            return st.execute();
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     };
 
-    static void delete(TableDescription desc, int id) {
+    static boolean delete(TableDescription desc, long id) {
         try(PreparedStatement st = DBConnection.getConnection().prepareStatement(
                 BuildQueriesUtils.buildSQLDeleteQuery(desc, id))
         ) {
-            st.execute();
+            return st.execute();
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     };
 
-    static <T extends SQLEntity> void update(TableDescription desc, T entity) {
+    static <T extends SQLEntity> boolean update(TableDescription desc, T entity) {
         try(PreparedStatement st = DBConnection.getConnection().prepareStatement(
                 BuildQueriesUtils.buildSQLUpdateQuery(desc, entity.getID()))
         ) {
-            entity.prepare(st);
-            st.execute();
+            return entity.prepare(st).execute();
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     };
 
-    static SQLEntity get(TableDescription desc, int id) {
+    static SQLEntity get(TableDescription desc, long id) {
         try(PreparedStatement st = DBConnection.getConnection().prepareStatement(BuildQueriesUtils.buildSQLGet(desc, id));
             ResultSet rs = st.executeQuery()
         ) {
@@ -68,16 +75,31 @@ public interface ObjectAccess {
     };
 
     static ArrayList<SQLEntity> getAll(TableDescription desc) {
-        ArrayList<SQLEntity> list = new ArrayList<>();
+        ArrayList<SQLEntity> res = new ArrayList<>();
         try(PreparedStatement st = DBConnection.getConnection().prepareStatement(BuildQueriesUtils.buildSQLGetAll(desc));
             ResultSet rs = st.executeQuery()
         ) {
             while (rs.next()) {
-                list.add(desc.getMeta().getEntity(rs));
+                res.add(desc.getMeta().getEntity(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return list;
+        return res;
     };
+
+    static ArrayList<SQLEntity> getAllWhere(TableDescription desc, String whereQuery) {
+        ArrayList<SQLEntity> res = new ArrayList<>();
+        try(PreparedStatement st = DBConnection.getConnection().prepareStatement(BuildQueriesUtils.buildSQLGetAll(desc));
+            ResultSet rs = st.executeQuery()
+        ) {
+            while (rs.next()) {
+                res.add(desc.getMeta().getEntity(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return res;
+    };
+
 }

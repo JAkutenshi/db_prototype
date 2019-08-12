@@ -9,11 +9,4 @@ public class Position extends EnumString {
         super(rs);
         super.setName(rs.getString("name"));
     }
-
-    @Override
-    public PreparedStatement prepare(PreparedStatement st) throws SQLException {
-        st.setInt(1, getID());
-        st.setString(2, getName());
-        return st;
-    }
 }

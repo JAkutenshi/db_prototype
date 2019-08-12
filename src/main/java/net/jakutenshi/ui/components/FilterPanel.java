@@ -5,8 +5,11 @@ import net.jakutenshi.ui.components.buttons.ClearFilterFieldButton;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import java.awt.*;
-import java.util.LinkedList;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+
+import static net.jakutenshi.utils.Constants.TEXT_FIELD_HEIGHT;
 
 public class FilterPanel extends JPanel {
     private JTextField filterField;
@@ -15,7 +18,7 @@ public class FilterPanel extends JPanel {
     public FilterPanel(EntitiesListPanel root) {
         super(new GridBagLayout());
         rootPanel = root;
-        setSize(300, 45);
+        setSize(300, TEXT_FIELD_HEIGHT);
         setPreferredSize(getSize());
         initFilterField();
         initClearButton();
@@ -58,20 +61,7 @@ public class FilterPanel extends JPanel {
     }
 
     private void filterList(String pattern) {
-        String p = pattern.toLowerCase();
-        String[] data = rootPanel.getObjects();
-
-        if (pattern.equals("")) {
-            rootPanel.setObjectsListValues(data);
-        } else {
-            LinkedList<String> result = new LinkedList<>();
-            for (String s : data) {
-                if (s.toLowerCase().contains(p)) {
-                    result.add(s);
-                }
-            }
-            rootPanel.setObjectsListValues(result.toArray(new String[0]));
-        }
+        rootPanel.filter(pattern);
     }
 
 

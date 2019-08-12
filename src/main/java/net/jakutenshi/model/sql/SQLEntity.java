@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public abstract class SQLEntity implements PreparedValues {
-    private int id;
+    private long id;
 
     public SQLEntity() {
         this.id = -1;
@@ -19,14 +19,14 @@ public abstract class SQLEntity implements PreparedValues {
     }
 
     public SQLEntity(ResultSet rs) throws SQLException {
-        this.id = rs.getInt("id");
+        this.id = rs.getLong("id");
     }
 
-    public int getID() {
+    public long getID() {
         return id;
     }
 
-    public void setID(int id) {
+    public void setID(long id) {
         this.id = id;
     }
 

@@ -105,6 +105,15 @@ public class Duty extends SQLEntity {
         return st;
     }
 
+    @Override
+    public String toString() {
+        return Model.EMPLOYEES.getEntity(securityID).getName()
+                + " в "
+                + DATE_FORMAT.format(getDate())
+                + " на посту <"
+                + Model.POSTS.getEntity(postID).getDescription() + ">";
+    }
+
     public int getSecurityID() {
         return securityID;
     }

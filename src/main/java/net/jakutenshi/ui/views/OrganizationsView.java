@@ -10,7 +10,7 @@ public class OrganizationsView extends JPanel {
 
     private EntitiesListPanel organizationsPanel;
 
-    public OrganizationsView(ArrayList<String> organizations) {
+    public OrganizationsView() {
         super();
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -18,7 +18,7 @@ public class OrganizationsView extends JPanel {
         c.weightx = 1.0;
         c.weighty = 1.0;
         c.fill = GridBagConstraints.BOTH;
-        organizationsPanel = new EntitiesListPanel(organizations);
+        //organizationsPanel = new EntitiesListPanel(organizations);
         add(organizationsPanel, c);
 
         JPanel postsPanel = new JPanel(new GridBagLayout());

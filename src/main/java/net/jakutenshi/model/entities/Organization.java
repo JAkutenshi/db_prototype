@@ -58,7 +58,7 @@ public class Organization extends SQLEntity {
 
     @Override
     public String toString() {
-        return name + " | " + legalAddress + " | " + phoneNum;
+        return name + " | Адрес: " + legalAddress + " | Тел.:" + phoneNum;
     }
 
     public String getDescription() {

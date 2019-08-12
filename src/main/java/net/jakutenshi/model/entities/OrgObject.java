@@ -76,6 +76,11 @@ public class OrgObject extends SQLEntity {
         return st;
     }
 
+    @Override
+    public String toString() {
+        return name + " | Адрес: " + address + " | Тел.:" + phoneNum;
+    }
+
     public int getOrganizationID() {
         return organizationID;
     }

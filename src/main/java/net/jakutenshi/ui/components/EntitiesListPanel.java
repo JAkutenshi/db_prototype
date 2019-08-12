@@ -1,32 +1,57 @@
 package net.jakutenshi.ui.components;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
+import net.jakutenshi.model.access.ObjectAccess;
+import net.jakutenshi.model.sql.DBTables;
+import net.jakutenshi.model.sql.SQLEntity;
+import net.jakutenshi.model.tables.AbstractTable;
+import net.jakutenshi.model.tables.TableDescription;
+import net.jakutenshi.utils.locales.Utils;
 
-public class EntitiesListPanel extends JPanel {
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.util.*;
+import java.util.List;
+
+public class EntitiesListPanel<T extends SQLEntity> extends JPanel implements PropertyChangeListener {
     private JButton       addButton;
     private JButton       removeButton;
     private JButton       editButton;
-    private JList<String> objectsList;
-    private ArrayList<String> entitiesModel;
+    private JList<T> objectsList;
+    private AbstractTable<T> model;
+    private PropertyChangeSupport support;
+    private T selectedEntity;
 
-    public EntitiesListPanel(ArrayList<String> entitiesModel) {
+    public EntitiesListPanel(AbstractTable<T> model) {
         super();
         setSize(300, 45);
         setPreferredSize(getSize());
 
-        this.entitiesModel = entitiesModel;
+        this.model = model;
+        support = new PropertyChangeSupport(this);
 
+        AddElements();
+        setEventListeners();
+    }
+
+    private void AddElements() {
         addButton = new JButton("+");
         removeButton = new JButton("-");
         editButton = new JButton("E");
-        objectsList = new JList<>();
-        objectsList.setListData((String[]) entitiesModel.toArray(new String[0]));
+        objectsList = new JList<>(model.getAbstractList());
+        if (model.hasValues()) {
+            objectsList.setSelectedIndex(0);
+            selectedEntity = objectsList.getSelectedValue();
+        }
 
-        setLayout(new GridBagLayout());
+        this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-
         c.insets = new Insets(2, 2, 2, 2);
         c.gridy = 0;
         c.gridx = 0;
@@ -56,16 +81,42 @@ public class EntitiesListPanel extends JPanel {
         this.add(editButton, c);
     }
 
-    public String[] getObjects() {
-        return entitiesModel.toArray(new String[0]);
+    private void setEventListeners() {
+        objectsList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent listSelectionEvent) {
+                if (!listSelectionEvent.getValueIsAdjusting()) {
+                    selectionHandler(listSelectionEvent);
+                }
+            }
+        });
     }
 
-    public void setObjectsListValues(String[] s) {
-        objectsList.setListData(s);
+    public void filter(String pattern) {
+        objectsList.setListData(new Vector<>(model.filter(pattern)));
     }
 
-    public void setEntitiesModel(ArrayList<String> entitiesModel) {
-        this.entitiesModel = entitiesModel;
-        setObjectsListValues(entitiesModel.toArray(new String[0]));
+    private void selectionHandler(ListSelectionEvent listSelectionEvent) {
+        T newValue = objectsList.getSelectedValue();
+        selectedEntity = newValue;
+        support.firePropertyChange("selectedEntity", selectedEntity, newValue);
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        support.addPropertyChangeListener(pcl);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener pcl) {
+        support.removePropertyChangeListener(pcl);
+    }
+
+    public void setModel(AbstractTable<T> model) {
+        this.model = model;
+        objectsList.setModel(model.getAbstractList());
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+        //ObjectAccess.getAllWhere(new TableDescription())
     }
 }

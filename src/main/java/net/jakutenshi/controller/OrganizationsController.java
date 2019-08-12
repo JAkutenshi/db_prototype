@@ -1,25 +1,24 @@
 package net.jakutenshi.controller;
 
-import net.jakutenshi.model.Descriptions;
-import net.jakutenshi.model.entities.Absence;
 import net.jakutenshi.model.entities.Organization;
-import net.jakutenshi.model.sql.DBTables;
-import net.jakutenshi.model.tables.AbstractTable;
 import net.jakutenshi.model.tables.Model;
-import net.jakutenshi.model.tables.TableDescription;
-import net.jakutenshi.ui.views.OrganizationsView;
-import net.jakutenshi.utils.Constants;
-import net.jakutenshi.utils.UIUtilFunctions;
+import net.jakutenshi.ui.components.EntitiesListPanel;
+import net.jakutenshi.ui.components.EntityPanel;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class OrganizationsController {
-    //OrganizationsView view;
-    JComponent view;
+    private JComponent view;
 
     public OrganizationsController() {
-        view = new JScrollPane(new JTable(Model.POSTS));
-        UIUtilFunctions.changeFont(view, Constants.FONT_TERMINUS);
+        view = new JPanel();
+
+        view.setLayout(new BoxLayout(view, BoxLayout.LINE_AXIS));
+
+        view.add(new EntityPanel());
+
+
     }
 
     public JComponent getView() {

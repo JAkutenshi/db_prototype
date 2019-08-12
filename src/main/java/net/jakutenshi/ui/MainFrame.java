@@ -15,6 +15,7 @@ public class MainFrame extends JFrame {
         super(title);
         this.locale = locale;
         this.setFont(Constants.FONT_TERMINUS);
+        UIManager.put( "ComboBox.disabledForeground", Color.BLACK );
 
         tabs = new JTabbedPane();
         tabs.setFont(this.getFont());

@@ -48,14 +48,6 @@ public class Absence extends SQLEntity {
         return st;
     }
 
-    public int getID() {
-        return super.getID();
-    }
-
-    public void setID(int id) {
-        super.setID(id);
-    }
-
     public int getDutyID() {
         return dutyID;
     }
