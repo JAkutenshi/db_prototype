@@ -8,26 +8,34 @@ import java.awt.*;
 
 import static net.jakutenshi.utils.Constants.*;
 
-public class TextFieldPanel extends JPanel {
+public class EntityTextFieldComponent extends JComponent {
     private JTextField field;
     private final boolean readOnly;
 
-    public TextFieldPanel(String description, boolean readOnly) {
+    public EntityTextFieldComponent(String description, String initValue, boolean readOnly) {
         super();
         this.readOnly = readOnly;
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         this.setBorder(BorderFactory.createTitledBorder(description));
         ((TitledBorder) this.getBorder()).setTitleFont(FONT_TERMINUS_BOLD);
+        this.setSize(new Dimension(Integer.MAX_VALUE, TEXT_FIELD_HEIGHT + 15));
 
-        field = new JTextField("Test");
+
+        field = new JTextField();
         field.setFont(FONT_TERMINUS);
         field.setEditable(false);
+        setField(initValue);
         field.setMaximumSize(new Dimension(Integer.MAX_VALUE, TEXT_FIELD_HEIGHT));
         this.add(field);
     }
 
     public String getValue(){
         return field.getText();
+    }
+
+    @Override
+    public String toString() {
+        return getValue();
     }
 
     public boolean isReadOnly() {
@@ -46,4 +54,9 @@ public class TextFieldPanel extends JPanel {
         super.setSize(width, height);
         field.setSize(width, height);
     }*/
+
+    public void setField(String value) {
+        this.field.setText(value);
+        field.setCaretPosition(0);
+    }
 }

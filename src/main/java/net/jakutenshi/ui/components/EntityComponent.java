@@ -1,30 +1,32 @@
 package net.jakutenshi.ui.components;
 
-import net.jakutenshi.model.entities.Absence;
 import net.jakutenshi.model.entities.enums.AbsenceReason;
 import net.jakutenshi.model.tables.Model;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class EntityPanel extends JPanel {
+public class EntityComponent extends JComponent {
     private JButton editButton   = new JButton("Изменить");
     private JButton applyButton  = new JButton("Принять");
     private JButton cancelButton = new JButton("Отмена");
 
-    public EntityPanel() {
+    public EntityComponent() {
         super();
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
         JPanel fieldsPanel = new JPanel();
         fieldsPanel.setLayout(new BoxLayout(fieldsPanel, BoxLayout.PAGE_AXIS));
-        TextFieldPanel f;
-        for (int i = 0; i < 10; i++) {
-            f = new TextFieldPanel("Информация", false);
+        EntityTextFieldComponent f;
+        for (int i = 0; i < 3; i++) {
+            f = new EntityTextFieldComponent("Информация", "Test", false);
             f.setSize(200, f.getHeight());
             fieldsPanel.add(f);
         }
-        fieldsPanel.add(new ComboBoxFieldPanel<AbsenceReason>(Model.ABSENCE_REASONS, "Причина отсутствия"));
+        fieldsPanel.add(new EnumBoxFieldComponent<AbsenceReason>(Model.ABSENCE_REASONS, "Причина отсутствия"));
+
+        fieldsPanel.add(new DateFieldComponent("Дата", false));
+
         this.add(fieldsPanel);
 
         this.add(Box.createVerticalGlue());
@@ -46,6 +48,7 @@ public class EntityPanel extends JPanel {
             editButton.setEnabled(true);
             applyButton.setEnabled(false);
             cancelButton.setEnabled(false);
+            //ToDo
         });
         buttonsPanel.add(applyButton);
         cancelButton.setEnabled(false);
@@ -53,6 +56,7 @@ public class EntityPanel extends JPanel {
             editButton.setEnabled(true);
             applyButton.setEnabled(false);
             cancelButton.setEnabled(false);
+            //ToDo
         });
         buttonsPanel.add(cancelButton);
         this.add(buttonsPanel);

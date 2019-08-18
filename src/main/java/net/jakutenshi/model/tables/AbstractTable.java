@@ -44,7 +44,7 @@ public class AbstractTable<T extends SQLEntity> extends AbstractTableModel {
         return description;
     }
 
-    public T getEntity(int id) {
+    public T getEntity(long id) {
         if (table.containsKey(id)) {
             return table.get(id);
         } else {
@@ -99,6 +99,13 @@ public class AbstractTable<T extends SQLEntity> extends AbstractTableModel {
         if (!table.containsKey(entity.getID())) { return false; }
         if (!ObjectAccess.update(description, entity)) { return false; }
         table.replace(entity.getID(), entity);
+        return true;
+    }
+
+    public boolean delete(T entity) {
+        if (!table.containsKey(entity.getID())) { return false; }
+        if (!ObjectAccess.delete(description, entity)) { return false; }
+        table.remove(entity.getID(), entity);
         return true;
     }
 

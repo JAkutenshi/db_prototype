@@ -33,7 +33,7 @@ public interface ObjectAccess {
         try(PreparedStatement st = DBConnection.getConnection().prepareStatement(
                 BuildQueriesUtils.buildSQLDeleteQuery(desc, entity.getID()))
         ) {
-            return st.execute();
+            return st.executeUpdate() == 1;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

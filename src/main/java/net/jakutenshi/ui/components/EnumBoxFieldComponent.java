@@ -2,6 +2,7 @@ package net.jakutenshi.ui.components;
 
 import net.jakutenshi.model.entities.enums.EnumString;
 import net.jakutenshi.model.tables.AbstractTable;
+import org.jdatepicker.JDatePicker;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -10,12 +11,12 @@ import java.util.Vector;
 
 import static net.jakutenshi.utils.Constants.*;
 
-public class ComboBoxFieldPanel<T extends EnumString> extends JPanel{
+public class EnumBoxFieldComponent<T extends EnumString> extends JComponent{
     private JComboBox<T> comboBox;
     private final AbstractTable<T> model;
     private JButton addButton;
 
-    public ComboBoxFieldPanel(AbstractTable<T> model, String description) {
+    public EnumBoxFieldComponent(AbstractTable<T> model, String description) {
         super();
         this.model = model;
         this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
