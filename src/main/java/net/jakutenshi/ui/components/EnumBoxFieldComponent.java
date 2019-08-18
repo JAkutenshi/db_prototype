@@ -2,7 +2,6 @@ package net.jakutenshi.ui.components;
 
 import net.jakutenshi.model.entities.enums.EnumString;
 import net.jakutenshi.model.tables.AbstractTable;
-import org.jdatepicker.JDatePicker;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -21,11 +20,11 @@ public class EnumBoxFieldComponent<T extends EnumString> extends JComponent{
         this.model = model;
         this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         this.setBorder(BorderFactory.createTitledBorder(description));
-        ((TitledBorder) this.getBorder()).setTitleFont(FONT_TERMINUS_BOLD);
+        ((TitledBorder) this.getBorder()).setTitleFont(FONT_BOLD);
 
         comboBox = new JComboBox<T>(new Vector<>(model.getArrayList()));
         comboBox.setSelectedIndex(0);
-        comboBox.setFont(FONT_TERMINUS);
+        comboBox.setFont(FONT);
         comboBox.setEnabled(false);
         comboBox.setMaximumSize(new Dimension(Integer.MAX_VALUE, TEXT_FIELD_HEIGHT));
         this.add(comboBox);
@@ -59,7 +58,7 @@ public class EnumBoxFieldComponent<T extends EnumString> extends JComponent{
         if (s == null) {
             return;
         }
-        if (model.select( object -> object.getName().equals(s) ).size() != 0) {
+        if (model.selectToArrayList( object -> object.getName().equals(s) ).size() != 0) {
             JOptionPane.showMessageDialog(this,
                     "Такой элемент уже есть!!",
                     "Ошибка!",

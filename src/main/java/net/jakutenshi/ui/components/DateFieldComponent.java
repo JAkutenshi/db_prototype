@@ -2,22 +2,15 @@ package net.jakutenshi.ui.components;
 
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
-import com.toedter.calendar.JSpinnerDateEditor;
 import com.toedter.calendar.JTextFieldDateEditor;
-import org.jdatepicker.JDatePicker;
-import org.jdatepicker.impl.DateComponentFormatter;
-import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
 import org.jdesktop.swingx.JXDatePicker;
-import org.jdesktop.swingx.JXMonthView;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Properties;
 
 import static net.jakutenshi.utils.Constants.*;
 
@@ -29,7 +22,7 @@ public class DateFieldComponent extends JComponent {
     public DateFieldComponent(String description, boolean isReadOnly) {
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         this.setBorder(BorderFactory.createTitledBorder(description));
-        ((TitledBorder) this.getBorder()).setTitleFont(FONT_TERMINUS_BOLD);
+        ((TitledBorder) this.getBorder()).setTitleFont(FONT_BOLD);
 
         this.isReadOnly = isReadOnly;
 

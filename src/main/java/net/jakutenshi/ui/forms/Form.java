@@ -56,4 +56,5 @@ public abstract class Form extends JPanel {
     public void compose() {
         compositor.compose(this, formComponents);
     }
+
 }

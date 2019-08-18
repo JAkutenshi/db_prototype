@@ -2,6 +2,9 @@ package net.jakutenshi.utils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class UIUtilFunctions {
     public static void changeFont ( Component component, Font font )
@@ -25,6 +28,5 @@ public class UIUtilFunctions {
     public static void showMessageDialog(Component source, String message) {
         JOptionPane.showMessageDialog(source, message, "Сообщение от программы", JOptionPane.INFORMATION_MESSAGE);
     }
-
 
 }

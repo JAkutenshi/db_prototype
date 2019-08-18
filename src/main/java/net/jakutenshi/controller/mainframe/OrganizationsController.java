@@ -1,8 +1,9 @@
 package net.jakutenshi.controller.mainframe;
 
 import net.jakutenshi.controller.Controller;
+import net.jakutenshi.model.ModelsMap;
 import net.jakutenshi.model.entities.Organization;
-import net.jakutenshi.model.tables.AbstractTable;
+import net.jakutenshi.model.tables.Model;
 import net.jakutenshi.ui.forms.EntityForm;
 import net.jakutenshi.ui.forms.OrganizationForm;
 import net.jakutenshi.ui.views.OrganizationsView;
@@ -11,15 +12,13 @@ import net.jakutenshi.utils.UIUtilFunctions;
 import javax.swing.*;
 import java.util.LinkedHashMap;
 
-public class OrganizationsController extends Controller<OrganizationsView, AbstractTable> {
-
-
+public class OrganizationsController extends Controller<OrganizationsView> {
 
     public OrganizationsController() {
         super();
     }
 
-    public OrganizationsController(Controller root, OrganizationsView view, AbstractTable model) {
+    public OrganizationsController(Controller root, OrganizationsView view, ModelsMap model) {
         super(root, view, model);
         createListeners();
     }
@@ -38,42 +37,42 @@ public class OrganizationsController extends Controller<OrganizationsView, Abstr
     }
 
     private void createAddOrganizationButtonAction() {
-        getView().getOrganizationsPanel().getAddButton().addActionListener(actionEvent -> {
+        getView().getOrganizationsListComponent().getAddButton().addActionListener(actionEvent -> {
             System.out.println("!");
-            if (isOrganizationSelectionEmpty()) {
-                UIUtilFunctions.showMessageDialog(getView(), "Организация не выбрана!");
-                return;
-            }
             Organization selectedOrganization = getView().getSelectedOrganization();
             EntityForm form = new EntityForm("Создать новую организацию", new OrganizationForm(
-                    selectedOrganization.getName(),
-                    selectedOrganization.getLegalAddress(),
-                    selectedOrganization.getPhoneNum(), true, (pane, components) -> {
+                    selectedOrganization == null ? "Новая организация" : selectedOrganization.getName(),
+                    selectedOrganization == null ? "Новый адрес"       : selectedOrganization.getLegalAddress(),
+                    selectedOrganization == null ? "+70000000000"      : selectedOrganization.getPhoneNum(),
+                    true, (pane, components) -> {
                         pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
                         for(JComponent c : components.values()) {
                            pane.add(c);
                         }
                     }));
+
             form.getAddButton().addActionListener(addNewOrganizetionEvent -> {
                 LinkedHashMap<String, String> values = form.getForm().getValues();
+                form.dispose();
+
                 Organization result;
-                if ((result = (Organization) getModel().insert(
+                if ((result = (Organization) getModel("organizations").insert(
                         new Organization(-1,
                                 values.get("Название"),
                                 values.get("Адрес"),
                                 values.get("Номер телефона")))) != null) {
                     updateOrganizationsView();
+                    UIUtilFunctions.showMessageDialog(getView(), "Новая организация " + result.getName() + "  добавлена!");
                 } else {
-                    UIUtilFunctions.showMessageDialog(getView(), "Не получилось удалить организацию"); //ToDo
+                    UIUtilFunctions.showMessageDialog(getView(), "Не получилось добавить организацию"); //ToDo
                 }
-                form.dispose();
             });
             form.setVisible(true);
         });
     }
 
     private void createOrganizationSelectionAction() {
-        getView().getOrganizationsPanel().getObjectsList().addListSelectionListener(listSelectionEvent -> {
+        getView().getOrganizationsListComponent().getObjectsList().addListSelectionListener(listSelectionEvent -> {
             if (listSelectionEvent.getValueIsAdjusting()) {
                 getView().showOrganizationInfo(getView().getSelectedOrganization());
                 //return;
@@ -83,15 +82,15 @@ public class OrganizationsController extends Controller<OrganizationsView, Abstr
     }
 
     private void createRemoveOrganizationButton() {
-        getView().getOrganizationsPanel().getRemoveButton().addActionListener(actionEvent -> {
-            if (isOrganizationSelectionEmpty()) {
+        getView().getOrganizationsListComponent().getRemoveButton().addActionListener(actionEvent -> {
+            if (getView().isOrganizationSelectionEmpty()) {
                 UIUtilFunctions.showMessageDialog(getView(), "Организация не выбрана!");
                 return;
             }
             if (UIUtilFunctions.isConfirmDialog(getView(),
                     "Вы точно хотите удалить организацию " + getView().getSelectedOrganization().getName() + " ?",
                     "Подтверждение удаления")) {
-                if (getModel().delete(getView().getSelectedOrganization())) {
+                if (getModel("organizations").delete(getView().getSelectedOrganization())) {
                     updateOrganizationsView();
                     UIUtilFunctions.showMessageDialog(getView(), "Организация удалена");
                 } else {
@@ -101,11 +100,18 @@ public class OrganizationsController extends Controller<OrganizationsView, Abstr
         });
     }
 
-    private void updateOrganizationsView() {
-        getView().getOrganizationsPanel().setModel(getModel());
+    public void updateOrganizationsView() {
+        getView().getOrganizationsListComponent().setModel(getModel("organizations"));
+        getView().deselectOrganizationForm();
+
     }
 
-    private boolean isOrganizationSelectionEmpty() {
-        return getView().getOrganizationsPanel().getObjectsList().isSelectionEmpty();
+    public void updateOrgObjectsInfo() {
+        updateModel("objects", Model.ORG_OBJECTS.selectToTable(object -> {
+            if (getView().isOrgObjectSelectionEmpty()) { return false; }
+            if (getView().getSelectedOrgObject().getID() == object.getOrganizationID()) { return true; }
+            return false;
+        }));
     }
+
 }

@@ -1,11 +1,12 @@
 package net.jakutenshi.controller.mainframe;
 
 import net.jakutenshi.controller.Controller;
+import net.jakutenshi.model.ModelsMap;
 import net.jakutenshi.model.tables.AbstractTable;
 
 import javax.swing.*;
 
-public class DutyLogController extends Controller<JComponent, AbstractTable> {
+public class DutyLogController extends Controller<JComponent> {
     public DutyLogController() {
     }
 
@@ -13,7 +14,7 @@ public class DutyLogController extends Controller<JComponent, AbstractTable> {
         super(root);
     }
 
-    public DutyLogController(Controller root, AbstractTable model) {
+    public DutyLogController(Controller root, ModelsMap model) {
         super(root, model);
     }
 
@@ -21,7 +22,7 @@ public class DutyLogController extends Controller<JComponent, AbstractTable> {
         super(root, view);
     }
 
-    public DutyLogController(Controller root, JComponent view, AbstractTable model) {
+    public DutyLogController(Controller root, JComponent view, ModelsMap model) {
         super(root, view, model);
     }
 }

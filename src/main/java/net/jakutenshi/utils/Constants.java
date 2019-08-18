@@ -17,9 +17,9 @@ public class Constants {
     public final static SimpleDateFormat DATE_FORMAT        = new SimpleDateFormat("dd.MM.yyyy");
     public final static SimpleDateFormat TIME_FORMAT        = new SimpleDateFormat("HH:mm");
 
-    public final static Font FONT_TERMINUS        = new  Font("Terminus (TTF)", Font.PLAIN, 16);
-    public final static Font FONT_TERMINUS_BOLD   = new  Font("Terminus (TTF)", Font.BOLD, 16);
-    public final static Font FONT_TERMINUS_ITALIC = new  Font("Terminus (TTF)", Font.ITALIC, 16);
+    public final static Font FONT = new  Font("Terminus (TTF)", Font.PLAIN, 20);
+    public final static Font FONT_BOLD = new  Font("Terminus (TTF)", Font.BOLD, 20);
+    public final static Font FONT_ITALIC = new  Font("Terminus (TTF)", Font.ITALIC, 20);
 
     public final static int TEXT_FIELD_HEIGHT   = 30;
     public final static int TEXT_FIELD_WIDTH    = 120;
@@ -28,9 +28,14 @@ public class Constants {
     public final static Dimension BUTTON_SIZE = new Dimension(Integer.MAX_VALUE, TEXT_FIELD_HEIGHT);
 
     public final static Composable DEFAULT_FORM_COMPOSER = (pane, components) -> {
+        int width = 0;
+        int height = 0;
         pane.setLayout(new BoxLayout(pane, BoxLayout.LINE_AXIS));
         for (JComponent c : components.values()) {
             pane.add(c);
+            width += c.getWidth();
+            if (c.getHeight() > height) { height = c.getHeight(); }
         }
+        pane.setSize(width, height);
     };
 }

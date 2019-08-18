@@ -1,14 +1,12 @@
 package net.jakutenshi.ui.components;
 
-import jdk.internal.org.jline.terminal.Size;
-
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 
 import static net.jakutenshi.utils.Constants.*;
 
-public class EntityTextFieldComponent extends JComponent {
+public class EntityTextFieldComponent extends JPanel {
     private JTextField field;
     private final boolean readOnly;
 
@@ -17,12 +15,12 @@ public class EntityTextFieldComponent extends JComponent {
         this.readOnly = readOnly;
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         this.setBorder(BorderFactory.createTitledBorder(description));
-        ((TitledBorder) this.getBorder()).setTitleFont(FONT_TERMINUS_BOLD);
+        ((TitledBorder) this.getBorder()).setTitleFont(FONT_BOLD);
         this.setSize(new Dimension(Integer.MAX_VALUE, TEXT_FIELD_HEIGHT + 15));
 
 
         field = new JTextField();
-        field.setFont(FONT_TERMINUS);
+        field.setFont(FONT);
         field.setEditable(false);
         setField(initValue);
         field.setMaximumSize(new Dimension(Integer.MAX_VALUE, TEXT_FIELD_HEIGHT));
@@ -58,5 +56,13 @@ public class EntityTextFieldComponent extends JComponent {
     public void setField(String value) {
         this.field.setText(value);
         field.setCaretPosition(0);
+    }
+
+    @Override
+    public void setFont(Font font) {
+        super.setFont(font);
+        if (field != null) {
+            field.setFont(font);
+        }
     }
 }

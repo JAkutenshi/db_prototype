@@ -15,7 +15,7 @@ public class ClearFilterFieldButton extends JButton {
     public ClearFilterFieldButton(JTextField filterField) {
         super("X");
         this.filterField = filterField;
-        this.setFont(Constants.FONT_TERMINUS_BOLD);
+        this.setFont(Constants.FONT_BOLD);
         Dimension size = new Dimension(WIDTH, HEIGHT);
         this.setSize(size);
         this.setMinimumSize(size);

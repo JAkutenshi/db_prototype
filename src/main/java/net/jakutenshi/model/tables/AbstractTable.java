@@ -4,8 +4,8 @@ import net.jakutenshi.model.AbstractList;
 import net.jakutenshi.model.access.ObjectAccess;
 import net.jakutenshi.model.sql.DBTables;
 import net.jakutenshi.model.sql.SQLEntity;
-import net.jakutenshi.model.sql.SQLSchema;
 import net.jakutenshi.utils.locales.Utils;
+import org.graalvm.compiler.api.replacements.Snippet;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.*;
@@ -36,6 +36,20 @@ public class AbstractTable<T extends SQLEntity> extends AbstractTableModel {
             table.put(t.getID(), (T) t);
             keys.add(t.getID());
 
+        }
+        columnNames = meta.getColumnNames();
+    }
+
+    public AbstractTable(DBTables meta, ArrayList<T> elements) {
+        this.description = new TableDescription(meta);
+        table = new LinkedHashMap<>();
+        keys  = new ArrayList<>();
+        if (elements != null) {
+            for (SQLEntity t : elements) {
+                table.put(t.getID(), (T) t);
+                keys.add(t.getID());
+
+            }
         }
         columnNames = meta.getColumnNames();
     }
@@ -83,7 +97,11 @@ public class AbstractTable<T extends SQLEntity> extends AbstractTableModel {
         }
     }
 
-    public ArrayList<T> select(Filter<T> f) {
+    public AbstractTable<T> selectToTable(EntitySelector<T> f) {
+        return new AbstractTable<T>(description.getMeta(), selectToArrayList(f));
+    }
+
+    public ArrayList<T> selectToArrayList(EntitySelector<T> f) {
         ArrayList<T> res = new ArrayList<>();
         T t;
         for (Long k : table.keySet()) {

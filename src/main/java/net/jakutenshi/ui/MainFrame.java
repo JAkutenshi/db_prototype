@@ -1,12 +1,9 @@
 package net.jakutenshi.ui;
 
-import net.jakutenshi.ui.views.OrganizationsView;
 import net.jakutenshi.utils.Constants;
-import net.jakutenshi.utils.locales.InterfaceLocale_ru_RU;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ResourceBundle;
 
 public class MainFrame extends JFrame {
     private JTabbedPane tabs;
@@ -19,8 +16,8 @@ public class MainFrame extends JFrame {
     public MainFrame(JComponent organizationsView, JComponent postView, JComponent employeesView,
                      JComponent salaryView, JComponent dutiesLogView) throws HeadlessException {
         super("БД Охранного Предприятия");
-        this.setSize(720, 1280);
-        this.setFont(Constants.FONT_TERMINUS);
+        this.setSize(1280, 720);
+        this.setFont(Constants.FONT);
         UIManager.put( "ComboBox.disabledForeground", Color.BLACK );
 
         tabs = new JTabbedPane();

@@ -1,43 +1,59 @@
 package net.jakutenshi.controller;
 
+import jdk.vm.ci.meta.Constant;
+import net.jakutenshi.model.ModelsMap;
 import net.jakutenshi.model.tables.AbstractTable;
 
-import javax.swing.*;
 import java.awt.*;
+import java.util.LinkedHashMap;
 
-public class Controller<C extends Component, M> {
+public class Controller<C extends Component> {
     private Controller root;
     private C view;
-    private M model;
+    private ModelsMap models;
 
     public Controller() {
         this.root  = null;
         this.view  = null;
-        this.model = null;
+        this.models = new ModelsMap();
     }
 
     public Controller(Controller root) {
         this.root  = root;
         this.view  = null;
-        this.model = null;
+        this.models = new ModelsMap();
     }
 
-    public Controller(Controller root, M model) {
+    public Controller(Controller root, ModelsMap models) {
         this.root  = root;
         this.view  = null;
-        this.model = model;
+        this.models = models;
+    }
+
+    public Controller(Controller root, String modelName, AbstractTable model) {
+        this.root  = root;
+        this.view  = null;
+        this.models = new ModelsMap();
+        this.models.addModel(modelName, model);
     }
 
     public Controller(Controller root, C view) {
         this.root  = root;
         this.view  = view;
-        this.model = null;
+        this.models = new ModelsMap();
     }
 
-    public Controller(Controller root, C view, M model) {
+    public Controller(Controller root, C view, ModelsMap models) {
         this.root  = root;
         this.view  = view;
-        this.model = model;
+        this.models = models;
+    }
+
+    public Controller(Controller root, C view, String modelName, AbstractTable model) {
+        this.root  = root;
+        this.view  = view;
+        this.models = new ModelsMap();
+        this.models.addModel(modelName, model);
     }
 
     public Controller getRoot() {
@@ -58,12 +74,26 @@ public class Controller<C extends Component, M> {
         return this;
     }
 
-    public M getModel() {
-        return model;
+    public ModelsMap getModels() {
+        return models;
     }
 
-    public Controller setModel(M model) {
-        this.model = model;
+    public Controller setModels(ModelsMap models) {
+        this.models = models;
+        return this;
+    }
+
+    public Controller updateModel(String modelName, AbstractTable model) {
+        this.models.updateModel(modelName, model);
+        return this;
+    }
+
+    public AbstractTable getModel(String modelName) {
+        return models.getModel(modelName);
+    }
+
+    public Controller addModel(String modelName, AbstractTable model) {
+        this.models.addModel(modelName, model);
         return this;
     }
 }
