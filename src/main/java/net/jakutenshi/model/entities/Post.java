@@ -16,8 +16,8 @@ public class Post extends SQLEntity {
     private String phoneNum;
     private int    number;
     private int    guardsChangingFreq;
-    private double surcharge;
-    private double checkage;
+//    private double surcharge;
+//    private double checkage;
     private int    arrivalMethodID;
 
     public Post() {
@@ -28,8 +28,8 @@ public class Post extends SQLEntity {
         this.phoneNum           = PHONE_NONE;
         this.number             = -1;
         this.guardsChangingFreq = -1;
-        this.surcharge          = -1.0;
-        this.checkage           = -1.0;
+//        this.surcharge          = -1.0;
+//        this.checkage           = -1.0;
         this.arrivalMethodID    = -1;
     }
 
@@ -42,8 +42,8 @@ public class Post extends SQLEntity {
         this.phoneNum           = phoneNum;
         this.number             = number;
         this.guardsChangingFreq = guardsChangingFreq;
-        this.surcharge          = surcharge;
-        this.checkage           = checkage;
+//        this.surcharge          = surcharge;
+//        this.checkage           = checkage;
         this.arrivalMethodID    = arrivalMethodID;
     }
 
@@ -55,8 +55,8 @@ public class Post extends SQLEntity {
         this.phoneNum           = rs.getString("phone_num");
         this.number             = rs.getInt("number");
         this.guardsChangingFreq = rs.getInt("guards_changing_freq");
-        this.surcharge          = rs.getDouble("surcharge");
-        this.checkage           = rs.getDouble("checkage");
+//        this.surcharge          = rs.getDouble("surcharge");
+//        this.checkage           = rs.getDouble("checkage");
         this.arrivalMethodID    = rs.getInt("arrival_method_id");
     }
 
@@ -69,9 +69,9 @@ public class Post extends SQLEntity {
             case 3: return getPhoneNum();
             case 4: return getNumber();
             case 5: return getGuardsChangingFreq();
-            case 6: return getSurcharge();
-            case 7: return getCheckage();
-            case 8: return Model.ARRIVAL_METHODS.getEntity(arrivalMethodID).getDescription(); //ToDo
+//            case 6: return getSurcharge();
+//            case 7: return getCheckage();
+            case 6: return Model.ARRIVAL_METHODS.getEntity(arrivalMethodID).getDescription(); //ToDo
             default: return null;
         }
     }
@@ -84,9 +84,9 @@ public class Post extends SQLEntity {
         st.setString(4, getPhoneNum());
         st.setInt(5, getNumber());
         st.setInt(6, getGuardsChangingFreq());
-        st.setDouble(7, getSurcharge());
-        st.setDouble(8, getCheckage());
-        st.setInt(9, getArrivalMethodID());
+//        st.setDouble(7, getSurcharge());
+//        st.setDouble(8, getCheckage());
+        st.setInt(7, getArrivalMethodID());
         return st;
     }
 
@@ -147,21 +147,21 @@ public class Post extends SQLEntity {
         this.guardsChangingFreq = guardsChangingFreq;
     }
 
-    public double getSurcharge() {
-        return surcharge;
-    }
-
-    public void setSurcharge(double surcharge) {
-        this.surcharge = surcharge;
-    }
-
-    public double getCheckage() {
-        return checkage;
-    }
-
-    public void setCheckage(double checkage) {
-        this.checkage = checkage;
-    }
+//    public double getSurcharge() {
+//        return surcharge;
+//    }
+//
+//    public void setSurcharge(double surcharge) {
+//        this.surcharge = surcharge;
+//    }
+//
+//    public double getCheckage() {
+//        return checkage;
+//    }
+//
+//    public void setCheckage(double checkage) {
+//        this.checkage = checkage;
+//    }
 
     public int getArrivalMethodID() {
         return arrivalMethodID;

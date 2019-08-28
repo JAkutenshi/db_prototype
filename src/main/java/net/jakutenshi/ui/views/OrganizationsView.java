@@ -32,57 +32,28 @@ public class OrganizationsView extends View {
         setLayout(new BoxLayout(this, LINE_AXIS));
 
         //Список организаций
-
-
-        add(organizationsListComponent = new EntitiesListComponent<>(Model.ORGANIZATIONS));
-
-        JPanel panel = BoxPanelFactory.create(PAGE_AXIS, "!!!");
-        organizationForm = new OrganizationForm("Выберите организацию", "Выберите организацию", "Выберите организацию",
-                false, Constants.DEFAULT_FORM_COMPOSER);
-        panel.add(organizationForm);
-
-        JPanel panel2 = BoxPanelFactory.create(LINE_AXIS, "^^^");
-        panel2.add(new EntitiesListComponent<>());
-        panel2.add(Box.createHorizontalGlue());
-        panel.add(panel2);
-
-        add(panel);
-
-//        add(organizationsListComponent);
+        add(organizationsListComponent = new EntitiesListComponent<>("Список организаций", Model.ORGANIZATIONS));
 
         //Информация об организации
-        /*JPanel organizationInfoPanel = new JPanel();
-        organizationInfoPanel.setLayout(new BoxLayout(organizationInfoPanel, BoxLayout.PAGE_AXIS));
-        organizationInfoPanel.setBorder(BorderFactory.createTitledBorder("Информация об организации")); //ToDo: local
-        ((TitledBorder) organizationInfoPanel.getBorder()).setTitleFont(Constants.FONT_BOLD);
+        JPanel organizationInfoPanel = BoxPanelFactory.create(PAGE_AXIS, "Информация об организации");
         organizationForm = new OrganizationForm("Выберите организацию", "Выберите организацию", "Выберите организацию",
                 false, Constants.DEFAULT_FORM_COMPOSER);
-        //organizationInfoPanel.add(organizationForm);
+        organizationInfoPanel.add(organizationForm);
         //organizationInfoPanel.add(Box.createVerticalGlue());
 
         // Раздел с информацией об объектах
-        JPanel objectsSide = new JPanel();
-        objectsSide.setLayout(new BoxLayout(objectsSide, BoxLayout.LINE_AXIS));
-        objectsSide.setBorder(BorderFactory.createTitledBorder("???"));
+        JPanel objectsSide = BoxPanelFactory.create(LINE_AXIS);
 
         //Список объектов
-        orgObjectsListComponent = new EntitiesListComponent<>();
-        objectsSide.add(orgObjectsListComponent);
-        objectsSide.add(Box.createHorizontalGlue());
-        objectsSide.add(new JTextArea());
+        objectsSide.add(orgObjectsListComponent = new EntitiesListComponent<>("Список объектов"));
 
         //Информация об объекте
-        JPanel objectInfoPanel = new JPanel();
-        objectInfoPanel.setBorder(BorderFactory.createTitledBorder("Информация об объекте"));
-        ((TitledBorder) objectInfoPanel.getBorder()).setTitleFont(Constants.FONT_BOLD);
-        objectInfoPanel.setLayout(new BoxLayout(objectInfoPanel, BoxLayout.PAGE_AXIS));
-        objectInfoPanel.add(objectsSide);
+        JPanel objectInfoPanel = BoxPanelFactory.create(PAGE_AXIS, "Информация об объекте");
+        objectInfoPanel.add(new JTextArea("WIP"));
+        objectsSide.add(objectInfoPanel);
+
         organizationInfoPanel.add(objectsSide);
-
-//        organizationInfoPanel.add(Box.createVerticalStrut(20));
-
-
-        add(organizationInfoPanel);*/
+        add(organizationInfoPanel);
     }
 
     public EntitiesListComponent getOrganizationsListComponent() {
@@ -101,11 +72,8 @@ public class OrganizationsView extends View {
         return orgObjectsListComponent.getSelectedEntity();
     }
 
-    public void showOrganizationInfo(Organization organization) {
-        LinkedHashMap fields = organizationForm.getFormComponents();
-        ((EntityTextFieldComponent) fields.get("Название")).setField(organization.getName());
-        ((EntityTextFieldComponent) fields.get("Адрес")).setField(organization.getLegalAddress());
-        ((EntityTextFieldComponent) fields.get("Номер телефона")).setField(organization.getPhoneNum());
+    public OrganizationForm getOrganizationForm() {
+        return organizationForm;
     }
 
     public boolean isOrganizationSelectionEmpty() {
@@ -116,9 +84,10 @@ public class OrganizationsView extends View {
         return orgObjectsListComponent.getObjectsList().isSelectionEmpty();
     }
 
-    public void deselectOrganizationForm() {
+    public void deselectOrganizationView() {
         for (JComponent c : organizationForm.getFormComponents().values()) {
             ((EntityTextFieldComponent) c).setField("Выберите организацию");
         }
+        orgObjectsListComponent.clear();
     }
 }

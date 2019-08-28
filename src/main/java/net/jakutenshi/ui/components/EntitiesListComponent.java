@@ -1,21 +1,17 @@
 package net.jakutenshi.ui.components;
 
-import net.jakutenshi.model.sql.DBTables;
 import net.jakutenshi.model.sql.SQLEntity;
 import net.jakutenshi.model.tables.AbstractTable;
 import net.jakutenshi.ui.components.buttons.ButtonFactory;
 import net.jakutenshi.utils.Constants;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.*;
 
-import static net.jakutenshi.utils.Constants.ENTITIES_LIST_WIDTH;
-import static net.jakutenshi.utils.Constants.TEXT_FIELD_HEIGHT;
+import static net.jakutenshi.utils.Constants.*;
 
 public class EntitiesListComponent<T extends SQLEntity> extends JPanel {
     private JButton       addButton;
@@ -25,22 +21,23 @@ public class EntitiesListComponent<T extends SQLEntity> extends JPanel {
     private AbstractTable<T> model;
 
 
-    public EntitiesListComponent() {
+    public EntitiesListComponent(String title) {
         super();
         this.model = null;
-        AddElements();
+        initComponent(title);
     }
 
-    public EntitiesListComponent(AbstractTable<T> model) {
+    public EntitiesListComponent(String title, AbstractTable<T> model) {
         super();
         this.model = model;
-        AddElements();
+        initComponent(title);
     }
 
-    private void AddElements() {
+    private void initComponent(String title) {
         this.setMaximumSize(new Dimension(ENTITIES_LIST_WIDTH, Integer.MAX_VALUE));
         this.setPreferredSize(new Dimension(this.getMaximumSize().width, this.getPreferredSize().height));
-//        this.setBorder(BorderFactory.createTitledBorder("WTF"));
+        this.setBorder(BorderFactory.createTitledBorder(title));
+        ((TitledBorder) this.getBorder()).setTitleFont(FONT_BOLD);
 
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         FilterComponent filterComponent = new FilterComponent(this);
@@ -100,5 +97,9 @@ public class EntitiesListComponent<T extends SQLEntity> extends JPanel {
 
     public T getSelectedEntity() {
         return objectsList.getSelectedValue();
+    }
+
+    public void clear() {
+        this.setModel(null);
     }
 }

@@ -8,13 +8,13 @@ import java.sql.SQLException;
 
 public class DBConnection {
     static {
+        DB_URI = "jdbc:sqlite:/home/jakutenshi/projects/java/db_prototype/src/main/resources/security_corp.sqlite3";
         /*JFileChooser fc = new JFileChooser(".", FileSystemView.getFileSystemView());
         if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             DB_URI = "jdbc:sqlite:" + fc.getSelectedFile().getPath();
         } else {
             System.exit(1);
         }*/
-        DB_URI = "jdbc:sqlite:/home/jakutenshi/projects/java/db_prototype/src/main/resources/security_corp.sqlite3";
     }
     //ToDo: make uri configurable and relative
     //private static String DB_URI = "jdbc:sqlite:/home/jakutenshi/projects/java/db_prototype/src/main/resources/security_corp.sqlite3";
@@ -31,7 +31,6 @@ public class DBConnection {
             connection = null;
         } finally {
             System.out.println("Connection to SQLite has been established.");
-
         }
     }
 

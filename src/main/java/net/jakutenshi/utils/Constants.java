@@ -27,7 +27,27 @@ public class Constants {
 
     public final static Dimension BUTTON_SIZE = new Dimension(Integer.MAX_VALUE, TEXT_FIELD_HEIGHT);
 
-    public final static Composable DEFAULT_FORM_COMPOSER = (pane, components) -> {
+    public final static Composable FLOW_FORM_COMPOSER = (pane, components) -> {
+        pane.setLayout(new FlowLayout());
+        for(JComponent c : components.values()) {
+            pane.add(c);
+        }
+    };
+
+    public final static Composable PAGE_FORM_COMPOSER = (pane, components) -> {
+
+        pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
+        int width = 0;
+        int height = 0;
+        for(JComponent c : components.values()) {
+            pane.add(c);
+            width += c.getWidth();
+            if (c.getHeight() > height) { height = c.getHeight(); }
+        }
+        pane.setSize(width, height);
+    };
+
+    public final static Composable LINE_FORM_COMPOSER = (pane, components) -> {
         int width = 0;
         int height = 0;
         pane.setLayout(new BoxLayout(pane, BoxLayout.LINE_AXIS));
@@ -38,4 +58,6 @@ public class Constants {
         }
         pane.setSize(width, height);
     };
+
+    public final static Composable DEFAULT_FORM_COMPOSER = LINE_FORM_COMPOSER;
 }

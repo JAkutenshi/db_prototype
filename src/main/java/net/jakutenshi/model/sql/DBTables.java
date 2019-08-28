@@ -166,8 +166,8 @@ public enum DBTables {
                 schema.put("phone_num",                SQLiteType.TEXT);
                 schema.put("number",                   SQLiteType.INTEGER);
                 schema.put("guards_changing_freq",     SQLiteType.INTEGER);
-                schema.put("surcharge",                SQLiteType.NUMERIC);
-                schema.put("checkage",                 SQLiteType.NUMERIC);
+//                schema.put("surcharge",                SQLiteType.NUMERIC);
+//                schema.put("checkage",                 SQLiteType.NUMERIC);
                 schema.put("arrival_method_id",        SQLiteType.INTEGER);
                 return new SQLSchema(schema);
             default:
@@ -246,8 +246,8 @@ public enum DBTables {
                         "Телефон",
                         "Номер",
                         "Частота смены",
-                        "Доплата",
-                        "Вычет",
+//                        "Доплата",
+//                        "Вычет",
                         "Способ прибытия" };
             case SALARY_TYPE:
                 return new String[] { "Тип З/П" };

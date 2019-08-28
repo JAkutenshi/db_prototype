@@ -6,7 +6,7 @@ import java.awt.*;
 
 import static net.jakutenshi.utils.Constants.*;
 
-public class EntityTextFieldComponent extends JPanel {
+public class EntityTextFieldComponent extends FieldComponent {
     private JTextField field;
     private final boolean readOnly;
 
@@ -27,13 +27,14 @@ public class EntityTextFieldComponent extends JPanel {
         this.add(field);
     }
 
-    public String getValue(){
+    @Override
+    public Object getValue(){
         return field.getText();
     }
 
     @Override
     public String toString() {
-        return getValue();
+        return getValue().toString();
     }
 
     public boolean isReadOnly() {

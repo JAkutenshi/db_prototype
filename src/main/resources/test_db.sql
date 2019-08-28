@@ -45,17 +45,21 @@ CREATE TABLE Post (
     phone_num            TEXT(12)  NOT NULL,
     number               INTEGER,
     guards_changing_freq INTEGER, -- In totalHours
-    surcharge            NUMERIC(10,2),
-    checkage             NUMERIC(10,2),
+--     surcharge            NUMERIC(10,2),
+--     checkage             NUMERIC(10,2),
     arrival_method_id    INTEGER,
 
     FOREIGN KEY (object_id)         REFERENCES OrgObject (id),
     FOREIGN KEY (arrival_method_id) REFERENCES ArrivalMethod(id)
 );
 INSERT INTO Post (object_id, name, address, phone_num, number,
-                  guards_changing_freq, surcharge, checkage, arrival_method_id)
+                  guards_changing_freq,
+--                   surcharge, checkage,
+                  arrival_method_id)
 VALUES
-(1, 'Вход', 'г.Серпухов, ул. Мира, д.17', '+79216666667', 1, 12, 0.0, 0.0, 1);
+(1, 'Вход', 'г.Серпухов, ул. Мира, д.17', '+79216666667', 1, 12,
+--  0.0, 0.0,
+ 1);
 
 
 -- Список всех сотрудников

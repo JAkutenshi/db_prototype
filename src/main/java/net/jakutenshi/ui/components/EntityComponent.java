@@ -23,7 +23,7 @@ public class EntityComponent extends JComponent {
             f.setSize(200, f.getHeight());
             fieldsPanel.add(f);
         }
-        fieldsPanel.add(new EnumBoxFieldComponent<AbsenceReason>(Model.ABSENCE_REASONS, "Причина отсутствия"));
+        fieldsPanel.add(new EntityComboBoxComponent<AbsenceReason>(Model.ABSENCE_REASONS, "Причина отсутствия", Model.ABSENCE_REASONS.getEntity(1)));
 
         fieldsPanel.add(new DateFieldComponent("Дата", false));
 
